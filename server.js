@@ -1,6 +1,7 @@
 // requires express and path core module
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 // allows us to use express object and establishes port const
 const app = express();
