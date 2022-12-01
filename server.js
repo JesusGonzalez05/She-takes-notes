@@ -43,11 +43,21 @@ app.get('/api/notes', (req, res) =>
 app.post("/api/notes", (req, res) => {
   const { text, title } = req.body;
     readFromFile("./db/db.json").then((data) => {
-      let db = JSON.parse(data);
-      db.push({ id: uuidv4(), text, title });
-      writeToFile("./db/db.json", db);
-      res.json(db)
+      let dataBase = JSON.parse(data);
+      dataBase.push({ id: uuidv4(), text, title });
+      writeToFile("./db/db.json", dataBase);
+      res.json(dataBase)
     });
+  });
+// Route for deleting notes
+app.delete("/api/notes/:id", (req, res) => {
+    const {id } = req.params;
+    readFromFile("./db/db.json").then((data) => {
+        let dataBase = JSON.parse(data);
+        dataBase = dataBase.filter(note => note.id !== id)
+        writeToFile("./db/db.json", dataBase);
+        res.json(dataBase)
+      });
   });
 
 // server :)
