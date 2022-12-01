@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
+const { v4: uuidv4 } = require('uuid');
 
 
 // allows us to use express object and establishes port const
@@ -37,6 +38,17 @@ const writeToFile = (destination, content) =>
 app.get('/api/notes', (req, res) =>
   readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
 );
+
+// Route for posting/saving note
+app.post("/api/notes", (req, res) => {
+  const { text, title } = req.body;
+    readFromFile("./db/db.json").then((data) => {
+      let db = JSON.parse(data);
+      db.push({ id: uuidv4(), text, title });
+      writeToFile("./db/db.json", db);
+      res.json(db)
+    });
+  });
 
 // server :)
 app.listen(PORT, () =>
